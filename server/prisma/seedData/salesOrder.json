@@ -1,0 +1,24 @@
+[
+  {
+    "id": "9a4a7f46-a281-4ff5-8f42-00dab76fa6aa",
+    "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+    "customerId": "6cdfbea1-6bdf-4082-a98a-fd983caabeab",
+    "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+    "orderDate": "2025-01-20T16:00:00.000Z",
+    "status": "COMPLETED",
+    "totalAmount": "708.00",
+    "isInterState": false,
+    "invoiceNumber": "SO-WS1-001"
+  },
+  {
+    "id": "e7ad459d-8179-48a0-8fda-0747ca7371bf",
+    "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+    "customerId": "ab37c840-5da6-4e52-bb6a-4c5371060b2e",
+    "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+    "orderDate": "2025-01-22T11:00:00.000Z",
+    "status": "PENDING",
+    "totalAmount": "708.00",
+    "isInterState": true,
+    "invoiceNumber": null
+  }
+]

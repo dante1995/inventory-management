@@ -1,0 +1,34 @@
+[
+  {
+    "id": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+    "name": "Glamour Salon & Spa",
+    "ownerId": "f2391c63-6c58-42fc-af2b-153bdc824b1f",
+    "address": "12, MG Road, Mumbai, Maharashtra",
+    "contactDetails": {
+      "phone": "+91-9876543210",
+      "email": "info@glamoursalon.com"
+    },
+    "branding": {
+      "logoUrl": "https://example.com/logo-glamour.png",
+      "themeColor": "#FFD700"
+    },
+    "gstin": "27ABCDE1234FZ1",
+    "registrationNumber": "REGMUM123"
+  },
+  {
+    "id": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+    "name": "Trendy Hair Studio",
+    "ownerId": "ae2c2fe4-ff63-4b10-8abb-15fdb82a5b2d",
+    "address": "221B Baker Street, Bengaluru, Karnataka",
+    "contactDetails": {
+      "phone": "+91-9087654321",
+      "email": "contact@trendyhair.com"
+    },
+    "branding": {
+      "logoUrl": "https://example.com/logo-trendy.png",
+      "themeColor": "#00FF7F"
+    },
+    "gstin": "29ABCDE1234FZ2",
+    "registrationNumber": "REGBLR456"
+  }
+]

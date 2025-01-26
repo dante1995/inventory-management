@@ -1,0 +1,46 @@
+[
+  {
+    "id": "d55451ed-c1a5-4658-b7f0-be3b1fd27618",
+    "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+    "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+    "name": "Shampoo X",
+    "category": "Hair Care",
+    "costPrice": "80.00",
+    "reorderLevel": 10,
+    "hsnCode": "33051010",
+    "currentStock": 50
+  },
+  {
+    "id": "a78fc791-f90f-4c1c-a58e-f6b9a8dcb97a",
+    "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+    "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+    "name": "Hair Gel Y",
+    "category": "Styling",
+    "costPrice": "60.00",
+    "reorderLevel": 15,
+    "hsnCode": "33059040",
+    "currentStock": 30
+  },
+  {
+    "id": "fce2410a-1c23-4fa0-9230-0b41ef084301",
+    "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+    "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+    "name": "Hair Spray Z",
+    "category": "Styling",
+    "costPrice": "90.00",
+    "reorderLevel": 10,
+    "hsnCode": "33059010",
+    "currentStock": 40
+  },
+  {
+    "id": "8e275f9c-60c1-418e-bd7f-7eb00f5f4d6d",
+    "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+    "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+    "name": "Conditioner A",
+    "category": "Hair Care",
+    "costPrice": "70.00",
+    "reorderLevel": 20,
+    "hsnCode": "33059020",
+    "currentStock": 25
+  }
+]

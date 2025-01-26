@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -13,75 +9,253 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  userId String @id
-  name   String
-  email  String
+model CompanyWorkspace {
+  id                 String    @id @default(uuid())
+  name               String
+  // Make ownerId optional to break the cyclical dependency:
+  ownerId            String?   @map("owner_id")
+  address            String
+  contactDetails     Json      @db.JsonB
+  branding           Json?     @db.JsonB
+  gstin              String    @unique // 15-digit GST number
+  registrationNumber String    @unique
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  owner              Resource? @relation("WorkspaceOwner", fields: [ownerId], references: [id])
+  stores             Store[]
+  resources          Resource[]
+  customers          Customer[]
+  vendors            Vendor[]
+  items              Item[]
+  services           Service[]
+  purchaseOrders     PurchaseOrder[]
+  salesOrders        SalesOrder[]
 }
 
-model Products {
-  productId     String      @id
-  name          String
-  price         Float
-  rating        Float?
-  stockQuantity Int
-  Sales         Sales[]
-  Purchases     Purchases[]
+model Resource {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  role               Role
+  firstName          String
+  lastName           String
+  email              String    @unique
+  phone              String?
+  pan                String?
+  assignedStoreId    String?   @map("assigned_store_id")
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace  @relation(fields: [companyWorkspaceId], references: [id])
+  assignedStore      Store?            @relation(fields: [assignedStoreId], references: [id])
+  ownedWorkspaces    CompanyWorkspace[] @relation("WorkspaceOwner")
+  managedStores      Store[]            @relation("StoreManager")
+  performedServices  SalesOrderService[]
 }
 
-model Sales {
-  saleId      String   @id
-  productId   String
-  timestamp   DateTime
-  quantity    Int
-  unitPrice   Float
-  totalAmount Float
-  product     Products @relation(fields: [productId], references: [productId])
+enum Role {
+  OWNER
+  MANAGER
+  STAFF
 }
 
-model Purchases {
-  purchaseId String   @id
-  productId  String
-  timestamp  DateTime
-  quantity   Int
-  unitCost   Float
-  totalCost  Float
-  product    Products @relation(fields: [productId], references: [productId])
+model Store {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  name               String
+  address            String
+  storeManagerId     String?   @map("store_manager_id")
+  openingTime        DateTime?
+  closingTime        DateTime?
+  storeGstin         String?
+  licenseNumber      String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace @relation(fields: [companyWorkspaceId], references: [id])
+  manager            Resource?        @relation("StoreManager", fields: [storeManagerId], references: [id])
+  staff              Resource[]
+  items              Item[]
+  services           Service[]
+  purchaseOrders     PurchaseOrder[]
+  salesOrders        SalesOrder[]
 }
 
-model Expenses {
-  expenseId String   @id
-  category  String
-  amount    Float
-  timestamp DateTime
+model Customer {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  firstName          String
+  lastName           String
+  phone              String
+  email              String?
+  gstin              String?
+  loyaltyPoints      Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace @relation(fields: [companyWorkspaceId], references: [id])
+  salesOrders        SalesOrder[]
 }
 
-model SalesSummary {
-  salesSummaryId   String   @id
-  totalValue       Float
-  changePercentage Float?
-  date             DateTime
+model Vendor {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  name               String
+  type               String[]
+  contactDetails     Json      @db.JsonB
+  gstin              String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace @relation(fields: [companyWorkspaceId], references: [id])
+  purchaseOrders     PurchaseOrder[]
 }
 
-model PurchaseSummary {
-  purchaseSummaryId String   @id
-  totalPurchased    Float
-  changePercentage  Float?
-  date              DateTime
+model Item {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  storeId            String?   @map("store_id")
+  name               String
+  category           String
+  costPrice          Decimal   @db.Decimal(10, 2)
+  reorderLevel       Int
+  hsnCode            String
+  currentStock       Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace   @relation(fields: [companyWorkspaceId], references: [id])
+  store              Store?            @relation(fields: [storeId], references: [id])
+  purchaseOrderItems PurchaseOrderItem[]
+  salesOrderItems    SalesOrderItem[]
 }
 
-model ExpenseSummary {
-  expenseSummaryId  String              @id
-  totalExpenses     Float
-  date              DateTime
-  ExpenseByCategory ExpenseByCategory[]
+model Service {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  storeId            String    @map("store_id")
+  name               String
+  duration           Int
+  price              Decimal   @db.Decimal(10, 2)
+  requiredItems      Json?     @db.JsonB
+  sacCode            String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace @relation(fields: [companyWorkspaceId], references: [id])
+  store              Store            @relation(fields: [storeId], references: [id])
+  salesOrderServices SalesOrderService[]
 }
 
-model ExpenseByCategory {
-  expenseByCategoryId String         @id
-  expenseSummaryId    String
-  category            String
-  amount              BigInt
-  date                DateTime
-  expenseSummary      ExpenseSummary @relation(fields: [expenseSummaryId], references: [expenseSummaryId])
+model PurchaseOrder {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  vendorId           String    @map("vendor_id")
+  storeId            String    @map("store_id")
+  orderDate          DateTime
+  status             OrderStatus
+  totalAmount        Decimal   @db.Decimal(10, 2)
+  invoiceNumber      String
+  isInterState       Boolean
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace  @relation(fields: [companyWorkspaceId], references: [id])
+  vendor             Vendor           @relation(fields: [vendorId], references: [id])
+  store              Store            @relation(fields: [storeId], references: [id])
+  items              PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id                 String    @id @default(uuid())
+  purchaseOrderId    String    @map("purchase_order_id")
+  itemId             String    @map("item_id")
+  quantity           Int
+  unitCost           Decimal   @db.Decimal(10, 2)
+  lineTotal          Decimal   @db.Decimal(10, 2)
+  gstRate            Decimal   @db.Decimal(5, 2)
+  lineCgst           Decimal   @db.Decimal(10, 2)
+  lineSgst           Decimal   @db.Decimal(10, 2)
+  lineIgst           Decimal   @db.Decimal(10, 2)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  purchaseOrder      PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  item               Item          @relation(fields: [itemId], references: [id])
+}
+
+model SalesOrder {
+  id                 String    @id @default(uuid())
+  companyWorkspaceId String    @map("company_workspace_id")
+  customerId         String    @map("customer_id")
+  storeId            String    @map("store_id")
+  orderDate          DateTime
+  status             OrderStatus
+  totalAmount        Decimal   @db.Decimal(10, 2)
+  isInterState       Boolean
+  invoiceNumber      String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  companyWorkspace   CompanyWorkspace @relation(fields: [companyWorkspaceId], references: [id])
+  customer           Customer         @relation(fields: [customerId], references: [id])
+  store              Store            @relation(fields: [storeId], references: [id])
+  items              SalesOrderItem[]
+  services           SalesOrderService[]
+}
+
+model SalesOrderItem {
+  id                 String    @id @default(uuid())
+  salesOrderId       String    @map("sales_order_id")
+  itemId             String    @map("item_id")
+  quantity           Int
+  unitPrice          Decimal   @db.Decimal(10, 2)
+  lineTotal          Decimal   @db.Decimal(10, 2)
+  gstRate            Decimal   @db.Decimal(5, 2)
+  lineCgst           Decimal   @db.Decimal(10, 2)
+  lineSgst           Decimal   @db.Decimal(10, 2)
+  lineIgst           Decimal   @db.Decimal(10, 2)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  salesOrder         SalesOrder @relation(fields: [salesOrderId], references: [id])
+  item               Item       @relation(fields: [itemId], references: [id])
+}
+
+model SalesOrderService {
+  id                 String    @id @default(uuid())
+  salesOrderId       String    @map("sales_order_id")
+  serviceId          String    @map("service_id")
+  resourceId         String    @map("resource_id")
+  unitPrice          Decimal   @db.Decimal(10, 2)
+  lineTotal          Decimal   @db.Decimal(10, 2)
+  gstRate            Decimal   @db.Decimal(5, 2)
+  lineCgst           Decimal   @db.Decimal(10, 2)
+  lineSgst           Decimal   @db.Decimal(10, 2)
+  lineIgst           Decimal   @db.Decimal(10, 2)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relationships
+  salesOrder         SalesOrder @relation(fields: [salesOrderId], references: [id])
+  service            Service    @relation(fields: [serviceId], references: [id])
+  resource           Resource   @relation(fields: [resourceId], references: [id])
+}
+
+enum OrderStatus {
+  DRAFT
+  PENDING
+  COMPLETED
+  CANCELLED
 }
