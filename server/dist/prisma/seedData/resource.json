@@ -1,0 +1,66 @@
+[
+    {
+        "id": "f2391c63-6c58-42fc-af2b-153bdc824b1f",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "role": "OWNER",
+        "firstName": "Rahul",
+        "lastName": "Mehta",
+        "email": "rahul.mehta@glamoursalon.com",
+        "phone": "+91-9000000001",
+        "pan": "ABCDE1234F"
+    },
+    {
+        "id": "82b1ce39-5806-4a29-9e9e-c8ecb8c9d5a3",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "role": "MANAGER",
+        "firstName": "Sneha",
+        "lastName": "Sharma",
+        "email": "sneha.sharma@glamoursalon.com",
+        "phone": "+91-9000000002",
+        "pan": "ABCDE5678G",
+        "assignedStoreId": "073cfb63-a866-420c-8d55-76966b53b432"
+    },
+    {
+        "id": "d39a5f48-04bc-4dd6-9c31-fdfc3c8b48d8",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "role": "STAFF",
+        "firstName": "Rohan",
+        "lastName": "Desai",
+        "email": "rohan.desai@glamoursalon.com",
+        "phone": "+91-9000000003",
+        "pan": "ABCDE9101H",
+        "assignedStoreId": "073cfb63-a866-420c-8d55-76966b53b432"
+    },
+    {
+        "id": "ae2c2fe4-ff63-4b10-8abb-15fdb82a5b2d",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "role": "OWNER",
+        "firstName": "Priya",
+        "lastName": "Kapoor",
+        "email": "priya.kapoor@trendyhair.com",
+        "phone": "+91-9000000011",
+        "pan": "XYZAB1234M"
+    },
+    {
+        "id": "d49045db-5b1f-48ac-8c9b-6c1a54e3f633",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "role": "MANAGER",
+        "firstName": "Amit",
+        "lastName": "Singh",
+        "email": "amit.singh@trendyhair.com",
+        "phone": "+91-9000000012",
+        "pan": "XYZAB5678N",
+        "assignedStoreId": "cfc64b63-6687-4b93-8310-62e6936f731f"
+    },
+    {
+        "id": "d6a1acbb-1a2a-4a56-9fc3-7a19bfe4b0b9",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "role": "STAFF",
+        "firstName": "Kiran",
+        "lastName": "Malhotra",
+        "email": "kiran.malhotra@trendyhair.com",
+        "phone": "+91-9000000013",
+        "pan": "XYZAB9101P",
+        "assignedStoreId": "cfc64b63-6687-4b93-8310-62e6936f731f"
+    }
+]

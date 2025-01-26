@@ -3,44 +3,66 @@
     "id": "d55451ed-c1a5-4658-b7f0-be3b1fd27618",
     "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
     "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
-    "name": "Shampoo X",
+    "name": "Shampoo X Premium",
     "category": "Hair Care",
-    "costPrice": "80.00",
-    "reorderLevel": 10,
+    "costPrice": "180.00",
+    "reorderLevel": 15,
     "hsnCode": "33051010",
-    "currentStock": 50
+    "currentStock": 3
   },
   {
     "id": "a78fc791-f90f-4c1c-a58e-f6b9a8dcb97a",
     "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
     "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
-    "name": "Hair Gel Y",
+    "name": "Hair Gel Professional",
     "category": "Styling",
-    "costPrice": "60.00",
-    "reorderLevel": 15,
+    "costPrice": "120.00",
+    "reorderLevel": 20,
     "hsnCode": "33059040",
-    "currentStock": 30
+    "currentStock": 4
   },
   {
     "id": "fce2410a-1c23-4fa0-9230-0b41ef084301",
     "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
     "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
-    "name": "Hair Spray Z",
+    "name": "Hair Spray Ultra Hold",
     "category": "Styling",
-    "costPrice": "90.00",
-    "reorderLevel": 10,
+    "costPrice": "150.00",
+    "reorderLevel": 12,
     "hsnCode": "33059010",
-    "currentStock": 40
+    "currentStock": 2
   },
   {
     "id": "8e275f9c-60c1-418e-bd7f-7eb00f5f4d6d",
     "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
     "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
-    "name": "Conditioner A",
+    "name": "Conditioner Deluxe",
     "category": "Hair Care",
-    "costPrice": "70.00",
-    "reorderLevel": 20,
+    "costPrice": "200.00",
+    "reorderLevel": 15,
     "hsnCode": "33059020",
-    "currentStock": 25
+    "currentStock": 5
+  },
+  {
+    "id": "7d164f3b-9c2a-4b8d-ae5f-1c9b8d7e6f5d",
+    "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+    "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+    "name": "Hair Color Kit Premium",
+    "category": "Color",
+    "costPrice": "250.00",
+    "reorderLevel": 10,
+    "hsnCode": "33059050",
+    "currentStock": 1
+  },
+  {
+    "id": "6c053e2a-8b1d-3a7c-9d4e-0b8a7f6e5d4c",
+    "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+    "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+    "name": "Hair Serum Ultra",
+    "category": "Treatment",
+    "costPrice": "180.00",
+    "reorderLevel": 8,
+    "hsnCode": "33059060",
+    "currentStock": 2
   }
 ]

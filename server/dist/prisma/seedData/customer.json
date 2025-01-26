@@ -1,0 +1,42 @@
+[
+    {
+        "id": "6cdfbea1-6bdf-4082-a98a-fd983caabeab",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "firstName": "Aryan",
+        "lastName": "Patel",
+        "phone": "+91-8000000004",
+        "email": "aryan.patel@example.com",
+        "gstin": null,
+        "loyaltyPoints": 10
+    },
+    {
+        "id": "3bf388a9-3ab2-4b14-8ebc-10291163d353",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "firstName": "Meera",
+        "lastName": "Khanna",
+        "phone": "+91-8000000005",
+        "email": "meera.khanna@example.com",
+        "gstin": null,
+        "loyaltyPoints": 20
+    },
+    {
+        "id": "ab37c840-5da6-4e52-bb6a-4c5371060b2e",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "firstName": "Sunil",
+        "lastName": "Nair",
+        "phone": "+91-8000000014",
+        "email": "sunil.nair@example.com",
+        "gstin": null,
+        "loyaltyPoints": 15
+    },
+    {
+        "id": "c2afd845-31df-41ae-8a66-db58fa08c56a",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "firstName": "Alisha",
+        "lastName": "Goyal",
+        "phone": "+91-8000000015",
+        "email": "alisha.goyal@example.com",
+        "gstin": null,
+        "loyaltyPoints": 5
+    }
+]

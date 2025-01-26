@@ -1,0 +1,38 @@
+[
+    {
+        "id": "1a848f54-c286-4cd5-94d3-25e04244f998",
+        "purchaseOrderId": "135bc222-59fd-4a02-b498-53922a6dfc9b",
+        "itemId": "d55451ed-c1a5-4658-b7f0-be3b1fd27618",
+        "quantity": 10,
+        "unitCost": "70.00",
+        "lineTotal": "826.00",
+        "gstRate": "18.00",
+        "lineCgst": "63.00",
+        "lineSgst": "63.00",
+        "lineIgst": "0.00"
+    },
+    {
+        "id": "96b8e29c-f547-4847-b52f-4ea900b6d5db",
+        "purchaseOrderId": "135bc222-59fd-4a02-b498-53922a6dfc9b",
+        "itemId": "a78fc791-f90f-4c1c-a58e-f6b9a8dcb97a",
+        "quantity": 5,
+        "unitCost": "60.00",
+        "lineTotal": "354.00",
+        "gstRate": "18.00",
+        "lineCgst": "27.00",
+        "lineSgst": "27.00",
+        "lineIgst": "0.00"
+    },
+    {
+        "id": "856c3b72-03ac-4f78-b0b3-5da84575d6f6",
+        "purchaseOrderId": "4c9c2641-02a4-4f0e-b0c8-8b5b3e19b569",
+        "itemId": "fce2410a-1c23-4fa0-9230-0b41ef084301",
+        "quantity": 5,
+        "unitCost": "150.00",
+        "lineTotal": "885.00",
+        "gstRate": "18.00",
+        "lineCgst": "0.00",
+        "lineSgst": "0.00",
+        "lineIgst": "135.00"
+    }
+]

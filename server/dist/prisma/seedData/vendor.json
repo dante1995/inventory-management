@@ -1,0 +1,24 @@
+[
+    {
+        "id": "758c6f9e-46ba-4bf9-a411-a84fed0c470b",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "name": "BeautySupplies Inc",
+        "type": ["COSMETICS"],
+        "contactDetails": {
+            "phone": "+91-9900000006",
+            "email": "contact@beautysupplies.com"
+        },
+        "gstin": "27BSINC1234FZ9"
+    },
+    {
+        "id": "27f730f7-4906-464a-a4c4-fba82625af9c",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "name": "HairCare Distributors",
+        "type": ["COSMETICS", "EQUIPMENT"],
+        "contactDetails": {
+            "phone": "+91-9900000017",
+            "email": "info@haircaredist.com"
+        },
+        "gstin": "29HCARD1234FZ1"
+    }
+]

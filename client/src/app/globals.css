@@ -15,8 +15,16 @@ body,
   height: 100%;
   width: 100%;
   @apply text-sm;
-  @apply bg-gray-500;
-  @apply text-gray-900;
+}
+
+html.dark {
+  background-color: #0B1120;
+  color-scheme: dark;
+}
+
+html.light {
+  background-color: #f9fafb;
+  color-scheme: light;
 }
 
 @media (min-width: 768px) {

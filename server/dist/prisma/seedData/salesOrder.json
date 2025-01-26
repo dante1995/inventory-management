@@ -1,0 +1,68 @@
+[
+    {
+        "id": "9a4a7f46-a281-4ff5-8f42-00dab76fa6aa",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "customerId": "6cdfbea1-6bdf-4082-a98a-fd983caabeab",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "orderDate": "2024-03-20T16:00:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "1200.00",
+        "isInterState": false,
+        "invoiceNumber": "SO-WS1-001"
+    },
+    {
+        "id": "e7ad459d-8179-48a0-8fda-0747ca7371bf",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "customerId": "ab37c840-5da6-4e52-bb6a-4c5371060b2e",
+        "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+        "orderDate": "2024-03-22T11:00:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "1500.00",
+        "isInterState": true,
+        "invoiceNumber": "SO-WS2-001"
+    },
+    {
+        "id": "c8f7d6e5-b4a3-4c2d-9e1f-0a9b8c7d6e5f",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "customerId": "3bf388a9-3ab2-4b14-8ebc-10291163d353",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "orderDate": "2024-03-15T14:30:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "950.00",
+        "isInterState": false,
+        "invoiceNumber": "SO-WS1-002"
+    },
+    {
+        "id": "b7e6d5c4-a3b2-4c1d-9e0f-8a7b6c5d4e3f",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "customerId": "c2afd845-31df-41ae-8a66-db58fa08c56a",
+        "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+        "orderDate": "2024-02-18T09:15:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "800.00",
+        "isInterState": true,
+        "invoiceNumber": "SO-WS2-002"
+    },
+    {
+        "id": "a6b5c4d3-e2f1-4b0a-8d9c-7e6f5d4c3b2a",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "customerId": "6cdfbea1-6bdf-4082-a98a-fd983caabeab",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "orderDate": "2024-02-10T13:45:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "650.00",
+        "isInterState": false,
+        "invoiceNumber": "SO-WS1-003"
+    },
+    {
+        "id": "95a4b3c2-d1e0-4f9a-8b7c-6e5d4c3b2a1f",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "customerId": "3bf388a9-3ab2-4b14-8ebc-10291163d353",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "orderDate": "2024-02-05T10:30:00.000Z",
+        "status": "COMPLETED",
+        "totalAmount": "550.00",
+        "isInterState": false,
+        "invoiceNumber": "SO-WS1-004"
+    }
+]

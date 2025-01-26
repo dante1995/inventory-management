@@ -1,0 +1,50 @@
+[
+    {
+        "id": "9f6aa62e-286d-4bd0-8c53-347cf7f9f117",
+        "salesOrderId": "9a4a7f46-a281-4ff5-8f42-00dab76fa6aa",
+        "itemId": "d55451ed-c1a5-4658-b7f0-be3b1fd27618",
+        "quantity": 2,
+        "unitPrice": "100.00",
+        "lineTotal": "236.00",
+        "gstRate": "18.00",
+        "lineCgst": "18.00",
+        "lineSgst": "18.00",
+        "lineIgst": "0.00"
+    },
+    {
+        "id": "b22900c1-dbcf-43b1-9c1a-af26a2ccfd87",
+        "salesOrderId": "e7ad459d-8179-48a0-8fda-0747ca7371bf",
+        "itemId": "8e275f9c-60c1-418e-bd7f-7eb00f5f4d6d",
+        "quantity": 1,
+        "unitPrice": "250.00",
+        "lineTotal": "295.00",
+        "gstRate": "18.00",
+        "lineCgst": "0.00",
+        "lineSgst": "0.00",
+        "lineIgst": "45.00"
+    },
+    {
+        "id": "a1b2c3d4-e5f6-4g7h-8i9j-0k1l2m3n4o5p",
+        "salesOrderId": "c8f7d6e5-b4a3-4c2d-9e1f-0a9b8c7d6e5f",
+        "itemId": "7d164f3b-9c2a-4b8d-ae5f-1c9b8d7e6f5d",
+        "quantity": 3,
+        "unitPrice": "180.00",
+        "lineTotal": "636.00",
+        "gstRate": "18.00",
+        "lineCgst": "32.40",
+        "lineSgst": "32.40",
+        "lineIgst": "0.00"
+    },
+    {
+        "id": "p5o4n3m2-l1k0-j9i8-h7g6-f5e4d3c2b1a",
+        "salesOrderId": "b7e6d5c4-a3b2-4c1d-9e0f-8a7b6c5d4e3f",
+        "itemId": "6c053e2a-8b1d-3a7c-9d4e-0b8a7f6e5d4c",
+        "quantity": 4,
+        "unitPrice": "150.00",
+        "lineTotal": "708.00",
+        "gstRate": "18.00",
+        "lineCgst": "0.00",
+        "lineSgst": "0.00",
+        "lineIgst": "108.00"
+    }
+]

@@ -1,0 +1,24 @@
+[
+    {
+        "id": "073cfb63-a866-420c-8d55-76966b53b432",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "name": "Glamour Salon - Andheri",
+        "address": "Plot 45, Andheri West, Mumbai, Maharashtra",
+        "storeManagerId": "82b1ce39-5806-4a29-9e9e-c8ecb8c9d5a3",
+        "openingTime": "2025-01-01T09:00:00.000Z",
+        "closingTime": "2025-01-01T21:00:00.000Z",
+        "storeGstin": "27ABCDE0987FZ1",
+        "licenseNumber": "LICMUM007"
+    },
+    {
+        "id": "cfc64b63-6687-4b93-8310-62e6936f731f",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "name": "Trendy Hair - Indiranagar",
+        "address": "36, Indiranagar, Bengaluru, Karnataka",
+        "storeManagerId": "d49045db-5b1f-48ac-8c9b-6c1a54e3f633",
+        "openingTime": "2025-01-01T10:00:00.000Z",
+        "closingTime": "2025-01-01T20:00:00.000Z",
+        "storeGstin": "29ABCDE0987FZ2",
+        "licenseNumber": "LICBLR009"
+    }
+]

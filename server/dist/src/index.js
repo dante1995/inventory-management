@@ -10,10 +10,18 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 /* ROUTE IMPORTS */
-const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
-const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
-const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
-const expenseRoutes_1 = __importDefault(require("./routes/expenseRoutes"));
+const companyWorkspaceRoutes_1 = __importDefault(require("./routes/companyWorkspaceRoutes"));
+const resourceRoutes_1 = __importDefault(require("./routes/resourceRoutes"));
+const storeRoutes_1 = __importDefault(require("./routes/storeRoutes"));
+const customerRoutes_1 = __importDefault(require("./routes/customerRoutes"));
+const vendorRoutes_1 = __importDefault(require("./routes/vendorRoutes"));
+const itemRoutes_1 = __importDefault(require("./routes/itemRoutes"));
+const serviceRoutes_1 = __importDefault(require("./routes/serviceRoutes"));
+const purchaseOrderRoutes_1 = __importDefault(require("./routes/purchaseOrderRoutes"));
+const purchaseOrderItemRoutes_1 = __importDefault(require("./routes/purchaseOrderItemRoutes"));
+const salesOrderRoutes_1 = __importDefault(require("./routes/salesOrderRoutes"));
+const salesOrderItemRoutes_1 = __importDefault(require("./routes/salesOrderItemRoutes"));
+const salesOrderServiceRoutes_1 = __importDefault(require("./routes/salesOrderServiceRoutes"));
 /* CONFIGURATIONS */
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -25,10 +33,18 @@ app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 /* ROUTES */
-app.use("/dashboard", dashboardRoutes_1.default); // http://localhost:8000/dashboard
-app.use("/products", productRoutes_1.default); // http://localhost:8000/products
-app.use("/users", userRoutes_1.default); // http://localhost:8000/users
-app.use("/expenses", expenseRoutes_1.default); // http://localhost:8000/expenses
+app.use('/company-workspaces', companyWorkspaceRoutes_1.default); // http://localhost:8000/company-workspaces
+app.use('/resources', resourceRoutes_1.default); // http://localhost:8000/resources
+app.use('/stores', storeRoutes_1.default); // http://localhost:8000/stores
+app.use('/customers', customerRoutes_1.default); // http://localhost:8000/customers
+app.use('/vendors', vendorRoutes_1.default); // http://localhost:8000/vendors
+app.use('/items', itemRoutes_1.default); // http://localhost:8000/items
+app.use('/services', serviceRoutes_1.default); // http://localhost:8000/services
+app.use('/purchase-orders', purchaseOrderRoutes_1.default); // http://localhost:8000/purchase-orders
+app.use('/purchase-order-items', purchaseOrderItemRoutes_1.default); // http://localhost:8000/purchase-order-items
+app.use('/sales-orders', salesOrderRoutes_1.default); // http://localhost:8000/sales-orders
+app.use('/sales-order-items', salesOrderItemRoutes_1.default); // http://localhost:8000/sales-order-items
+app.use('/sales-order-services', salesOrderServiceRoutes_1.default); // http://localhost:8000/sales-order-services
 /* SERVER */
 const port = Number(process.env.PORT) || 3001;
 app.listen(port, "0.0.0.0", () => {

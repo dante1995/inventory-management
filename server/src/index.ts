@@ -5,10 +5,18 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 /* ROUTE IMPORTS */
-import dashboardRoutes from "./routes/dashboardRoutes";
-import productRoutes from "./routes/productRoutes";
-import userRoutes from "./routes/userRoutes";
-import expenseRoutes from "./routes/expenseRoutes";
+import companyWorkspaceRoutes from "./routes/companyWorkspaceRoutes";
+import resourceRoutes from "./routes/resourceRoutes";
+import storeRoutes from "./routes/storeRoutes";
+import customerRoutes from "./routes/customerRoutes";
+import vendorRoutes from "./routes/vendorRoutes";
+import itemRoutes from "./routes/itemRoutes";
+import serviceRoutes from "./routes/serviceRoutes";
+import purchaseOrderRoutes from "./routes/purchaseOrderRoutes";
+import purchaseOrderItemRoutes from "./routes/purchaseOrderItemRoutes";
+import salesOrderRoutes from "./routes/salesOrderRoutes";
+import salesOrderItemRoutes from "./routes/salesOrderItemRoutes";
+import salesOrderServiceRoutes from "./routes/salesOrderServiceRoutes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -22,10 +30,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 /* ROUTES */
-app.use("/dashboard", dashboardRoutes); // http://localhost:8000/dashboard
-app.use("/products", productRoutes); // http://localhost:8000/products
-app.use("/users", userRoutes); // http://localhost:8000/users
-app.use("/expenses", expenseRoutes); // http://localhost:8000/expenses
+app.use('/company-workspaces', companyWorkspaceRoutes); // http://localhost:8000/company-workspaces
+app.use('/resources', resourceRoutes); // http://localhost:8000/resources
+app.use('/stores', storeRoutes); // http://localhost:8000/stores
+app.use('/customers', customerRoutes); // http://localhost:8000/customers
+app.use('/vendors', vendorRoutes); // http://localhost:8000/vendors
+app.use('/items', itemRoutes); // http://localhost:8000/items
+app.use('/services', serviceRoutes); // http://localhost:8000/services
+app.use('/purchase-orders', purchaseOrderRoutes); // http://localhost:8000/purchase-orders
+app.use('/purchase-order-items', purchaseOrderItemRoutes); // http://localhost:8000/purchase-order-items
+app.use('/sales-orders', salesOrderRoutes); // http://localhost:8000/sales-orders
+app.use('/sales-order-items', salesOrderItemRoutes); // http://localhost:8000/sales-order-items
+app.use('/sales-order-services', salesOrderServiceRoutes); // http://localhost:8000/sales-order-services
 
 /* SERVER */
 const port = Number(process.env.PORT) || 3001;

@@ -1,0 +1,70 @@
+[
+    {
+        "id": "ad1a3373-0bc2-4a1d-a4cb-59b75e1c286a",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "name": "Haircut Basic",
+        "duration": 30,
+        "price": "150.00",
+        "requiredItems": [
+            {
+                "itemId": "a78fc791-f90f-4c1c-a58e-f6b9a8dcb97a",
+                "quantity": 1
+            }
+        ],
+        "sacCode": "998528"
+    },
+    {
+        "id": "1f66ebf0-2c0a-47fa-aea9-0c4d1a845ef6",
+        "companyWorkspaceId": "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+        "storeId": "073cfb63-a866-420c-8d55-76966b53b432",
+        "name": "Hair Wash & Conditioning",
+        "duration": 45,
+        "price": "250.00",
+        "requiredItems": [
+            {
+                "itemId": "d55451ed-c1a5-4658-b7f0-be3b1fd27618",
+                "quantity": 1
+            },
+            {
+                "itemId": "a78fc791-f90f-4c1c-a58e-f6b9a8dcb97a",
+                "quantity": 1
+            }
+        ],
+        "sacCode": "998528"
+    },
+    {
+        "id": "227401a8-b867-4c86-95fb-497956eb2ce0",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+        "name": "Premium Haircut",
+        "duration": 40,
+        "price": "200.00",
+        "requiredItems": [
+            {
+                "itemId": "fce2410a-1c23-4fa0-9230-0b41ef084301",
+                "quantity": 1
+            }
+        ],
+        "sacCode": "998528"
+    },
+    {
+        "id": "aed08ba2-ea19-4fd8-8ab9-b6ed81b950a3",
+        "companyWorkspaceId": "5ef6c6e3-94bc-40c1-bcb1-8c85f558c9e9",
+        "storeId": "cfc64b63-6687-4b93-8310-62e6936f731f",
+        "name": "Hair Spa",
+        "duration": 60,
+        "price": "400.00",
+        "requiredItems": [
+            {
+                "itemId": "fce2410a-1c23-4fa0-9230-0b41ef084301",
+                "quantity": 1
+            },
+            {
+                "itemId": "8e275f9c-60c1-418e-bd7f-7eb00f5f4d6d",
+                "quantity": 1
+            }
+        ],
+        "sacCode": "998528"
+    }
+]

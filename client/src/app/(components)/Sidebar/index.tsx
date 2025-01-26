@@ -4,13 +4,19 @@ import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
 import {
   Archive,
+  BarChart2,
   CircleDollarSign,
   Clipboard,
+  Handshake,
   Layout,
   LucideIcon,
   Menu,
+  ShoppingCart,
   SlidersHorizontal,
+  Store as StoreIcon,
+  Truck,
   User,
+  Users as UsersIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,14 +52,9 @@ const SidebarLink = ({
       }`}
       >
         <Icon className="w-6 h-6 !text-gray-700" />
-
-        <span
-          className={`${
-            isCollapsed ? "hidden" : "block"
-          } font-medium text-gray-700`}
-        >
-          {label}
-        </span>
+        {!isCollapsed && (
+          <span className="font-medium text-gray-700">{label}</span>
+        )}
       </div>
     </Link>
   );
@@ -82,19 +83,17 @@ const Sidebar = () => {
         }`}
       >
         <Image
-          src="https://s3-inventorymanagement.s3.us-east-2.amazonaws.com/logo.png"
-          alt="edstock-logo"
+          src="https://raw.githubusercontent.com/ed-roh/inventory-management/master/server/assets/logo.png"
+          alt="app-logo"
           width={27}
           height={27}
           className="rounded w-8"
+          priority
         />
-        <h1
-          className={`${
-            isSidebarCollapsed ? "hidden" : "block"
-          } font-extrabold text-2xl`}
-        >
-          EDSTOCK
-        </h1>
+        
+        {!isSidebarCollapsed && (
+          <h1 className="font-extrabold text-2xl">EDSTOCK</h1>
+        )}
 
         <button
           className="md:hidden px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
@@ -125,9 +124,45 @@ const Sidebar = () => {
           isCollapsed={isSidebarCollapsed}
         />
         <SidebarLink
+          href="/purchase-orders"
+          icon={Truck}
+          label="Purchase Orders"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/sales-orders"
+          icon={ShoppingCart}
+          label="Sales Orders"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/customers"
+          icon={UsersIcon}
+          label="Customers"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/vendors"
+          icon={Handshake}
+          label="Vendors"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/stores"
+          icon={StoreIcon}
+          label="Stores"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
           href="/users"
           icon={User}
           label="Users"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/analytics"
+          icon={BarChart2}
+          label="Analytics"
           isCollapsed={isSidebarCollapsed}
         />
         <SidebarLink
@@ -146,7 +181,7 @@ const Sidebar = () => {
 
       {/* FOOTER */}
       <div className={`${isSidebarCollapsed ? "hidden" : "block"} mb-10`}>
-        <p className="text-center text-xs text-gray-500">&copy; 2024 Edstock</p>
+        <p className="text-center text-xs text-gray-500">&copy; 2025 Harmoniq</p>
       </div>
     </div>
   );

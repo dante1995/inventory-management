@@ -1,87 +1,240 @@
 "use client";
 
-import { useAppDispatch, useAppSelector } from "@/app/redux";
-import { setIsDarkMode, setIsSidebarCollapsed } from "@/state";
-import { Bell, Menu, Moon, Settings, Sun } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
-const Navbar = () => {
+/** Redux, global state, and side effects */
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsSidebarCollapsed } from "@/state";
+
+/** Lucide icons (lightweight, scalable icons) */
+import {
+  Layout,              // For Dashboard
+  Archive,             // For Inventory
+  Clipboard,           // For Products
+  Truck,               // For Purchase Orders
+  ShoppingCart,        // For Sales Orders
+  Users as UsersIcon,  // For Customers
+  Handshake,           // For Vendors
+  Store as StoreIcon,  // For Stores
+  User,                // For (internal) Users/Employees
+  BarChart2,           // For Analytics
+  SlidersHorizontal,   // For Settings
+  CircleDollarSign,    // For Expenses
+  Menu,                // For collapsing/expanding sidebar
+  LucideIcon,
+} from "lucide-react";
+
+/**
+ * Purpose:
+ * - SidebarLinkProps defines the shape of data needed to render a navigation link.
+ *   Each link has a destination href, an icon, a text label, and a flag indicating
+ *   whether the sidebar is collapsed or expanded.
+ */
+interface SidebarLinkProps {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  isCollapsed: boolean;
+}
+
+/**
+ * SidebarLink:
+ * - Reusable component for each navigation item in the sidebar.
+ * - It highlights the active route and handles the collapsed state by showing or hiding text.
+ */
+const SidebarLink = ({
+  href,
+  icon: Icon,
+  label,
+  isCollapsed,
+}: SidebarLinkProps) => {
+  const pathname = usePathname();
+  const isActive =
+    pathname === href || (pathname === "/" && href === "/dashboard");
+
+  return (
+    <Link href={href}>
+      <div
+        className={`cursor-pointer flex items-center ${
+          isCollapsed ? "justify-center py-4" : "justify-start px-8 py-4"
+        }
+        hover:text-blue-500 hover:bg-blue-100 gap-3 transition-colors ${
+          isActive ? "bg-blue-200 text-white" : ""
+        }
+      }`}
+      >
+        <Icon className="w-6 h-6 !text-gray-700" />
+
+        {!isCollapsed && (
+          <span className="font-medium text-gray-700">{label}</span>
+        )}
+      </div>
+    </Link>
+  );
+};
+
+/**
+ * Sidebar Component:
+ * - This holds the entire left navigation area.
+ * - Handles the collapsed/expanded state via Redux (global state).
+ * - Renders top branding (logo + name), then all feature links, then a footer.
+ */
+const Sidebar = () => {
   const dispatch = useAppDispatch();
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
-  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
+  // Toggle the sidebar collapsed state.
   const toggleSidebar = () => {
     dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
   };
 
-  const toggleDarkMode = () => {
-    dispatch(setIsDarkMode(!isDarkMode));
-  };
+  // Dynamic width classes to animate the sidebar expansion and collapse.
+  const sidebarClassNames = `fixed flex flex-col ${
+    isSidebarCollapsed ? "w-0 md:w-16" : "w-72 md:w-64"
+  } bg-white transition-all duration-300 overflow-hidden h-full shadow-md z-40`;
 
   return (
-    <div className="flex justify-between items-center w-full mb-7">
-      {/* LEFT SIDE */}
-      <div className="flex justify-between items-center gap-5">
+    <div className={sidebarClassNames}>
+      {/* 
+        TOP SECTION: 
+        - Logo, App Name (EDSTOCK), 
+        - Mobile toggler (hamburger icon) for smaller screens
+      */}
+      <div
+        className={`flex gap-3 justify-between md:justify-normal items-center pt-8 ${
+          isSidebarCollapsed ? "px-5" : "px-8"
+        }`}
+      >
+        <Image
+          src="/path/to/home-icon.svg" // Replace with the actual path to the Home icon
+          alt="edstock-logo"
+          width={27}
+          height={27}
+          className="rounded w-8"
+        />
+        
+        {!isSidebarCollapsed && (
+          <h1 className="font-extrabold text-2xl">EDSTOCK</h1>
+        )}
+
+        {/* Hamburger button only shown on mobile (md:hidden) */}
         <button
-          className="px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
+          className="md:hidden px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
           onClick={toggleSidebar}
         >
           <Menu className="w-4 h-4" />
         </button>
-
-        <div className="relative">
-          <input
-            type="search"
-            placeholder="Start type to search groups & products"
-            className="pl-10 pr-4 py-2 w-50 md:w-60 border-2 border-gray-300 bg-white rounded-lg focus:outline-none focus:border-blue-500"
-          />
-
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-non">
-            <Bell className="text-gray-500" size={20} />
-          </div>
-        </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="flex justify-between items-center gap-5">
-        <div className="hidden md:flex justify-between items-center gap-5">
-          <div>
-            <button onClick={toggleDarkMode}>
-              {isDarkMode ? (
-                <Sun className="cursor-pointer text-gray-500" size={24} />
-              ) : (
-                <Moon className="cursor-pointer text-gray-500" size={24} />
-              )}
-            </button>
-          </div>
-          <div className="relative">
-            <Bell className="cursor-pointer text-gray-500" size={24} />
-            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-[0.4rem] py-1 text-xs font-semibold leading-none text-red-100 bg-red-400 rounded-full">
-              3
-            </span>
-          </div>
-          <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
-          <div className="flex items-center gap-3 cursor-pointer">
-            <Image
-              src="https://s3-inventorymanagement.s3.us-east-2.amazonaws.com/profile.jpg"
-              alt="Profile"
-              width={50}
-              height={50}
-              className="rounded-full h-full object-cover"
-            />
-            <span className="font-semibold">Ed Roh</span>
-          </div>
-        </div>
-        <Link href="/settings">
-          <Settings className="cursor-pointer text-gray-500" size={24} />
-        </Link>
+      {/* LINKS SECTION:
+         Each link corresponds to a core OMS feature or module.
+         They are ordered in a way that typically aligns with
+         an OMS user's flow:
+         
+         1. Dashboard    - The landing overview
+         2. Inventory    - High-level stock management
+         3. Products     - Item management (catalog)
+         4. Purchase Orders - Inbound supply side
+         5. Sales Orders    - Outbound / customer orders
+         6. Customers       - CRM or basic customer data
+         7. Vendors         - Supplier management
+         8. Stores          - Multiple store/warehouse mgmt
+         9. Users           - Internal staff & roles
+         10. Analytics      - Reporting & insights
+         11. Settings       - Configurations
+         12. Expenses       - Additional overhead mgmt
+      */}
+      <div className="flex-grow mt-8">
+        <SidebarLink
+          href="/dashboard"
+          icon={Layout}
+          label="Dashboard"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/inventory"
+          icon={Archive}
+          label="Inventory"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/products"
+          icon={Clipboard}
+          label="Products"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/purchase-orders"
+          icon={Truck}
+          label="Purchase Orders"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/sales-orders"
+          icon={ShoppingCart}
+          label="Sales Orders"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/customers"
+          icon={UsersIcon}
+          label="Customers"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/vendors"
+          icon={Handshake}
+          label="Vendors"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/stores"
+          icon={StoreIcon}
+          label="Stores"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/users"
+          icon={User}
+          label="Users"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/analytics"
+          icon={BarChart2}
+          label="Analytics"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/settings"
+          icon={SlidersHorizontal}
+          label="Settings"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/expenses"
+          icon={CircleDollarSign}
+          label="Expenses"
+          isCollapsed={isSidebarCollapsed}
+        />
+      </div>
+
+      {/* FOOTER SECTION:
+         - Shows up only when expanded,
+         - Typically used for version info, legal, branding, etc.
+       */}
+      <div className={`${isSidebarCollapsed ? "hidden" : "block"} mb-10`}>
+        <p className="text-center text-xs text-gray-500">
+          &copy; 2025 Harmoniq
+        </p>
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default Sidebar;

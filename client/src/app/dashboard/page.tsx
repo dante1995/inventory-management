@@ -1,82 +1,80 @@
 "use client";
 
 import {
-  CheckCircle,
+  AlertTriangle,
+  ArrowDownRight,
+  ArrowUpRight,
+  Box,
+  DollarSign,
   Package,
-  Tag,
-  TrendingDown,
-  TrendingUp,
+  ShoppingCart,
+  Users,
 } from "lucide-react";
-import CardExpenseSummary from "./CardExpenseSummary";
+import CardInventoryAlerts from "./CardInventoryAlerts";
+import CardOrderSummary from "./CardOrderSummary";
 import CardPopularProducts from "./CardPopularProducts";
-import CardPurchaseSummary from "./CardPurchaseSummary";
-import CardSalesSummary from "./CardSalesSummary";
+import CardRevenueSummary from "./CardRevenueSummary";
 import StatCard from "./StatCard";
+import { useGetSalesOrdersQuery, useGetCustomersQuery, useGetItemsQuery } from "@/state/api";
 
 const Dashboard = () => {
+  const { data: salesOrders } = useGetSalesOrdersQuery();
+  const { data: customers } = useGetCustomersQuery();
+  const { data: items } = useGetItemsQuery();
+
+  // Calculate key metrics
+  const totalRevenue = salesOrders?.reduce((sum, order) => sum + parseFloat(order.totalAmount), 0) || 0;
+  const avgOrderValue = totalRevenue / (salesOrders?.length || 1);
+  const customerCount = customers?.length || 0;
+  const inventoryValue = items?.reduce((sum, item) => sum + parseFloat(item.costPrice), 0) || 0;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 xl:overflow-auto gap-10 pb-4 custom-grid-rows">
-      <CardPopularProducts />
-      <CardSalesSummary />
-      <CardPurchaseSummary />
-      <CardExpenseSummary />
-      <StatCard
-        title="Customer & Expenses"
-        primaryIcon={<Package className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2023"
-        details={[
-          {
-            title: "Customer Growth",
-            amount: "175.00",
-            changePercentage: 131,
-            IconComponent: TrendingUp,
-          },
-          {
-            title: "Expenses",
-            amount: "10.00",
-            changePercentage: -56,
-            IconComponent: TrendingDown,
-          },
-        ]}
-      />
-      <StatCard
-        title="Dues & Pending Orders"
-        primaryIcon={<CheckCircle className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2023"
-        details={[
-          {
-            title: "Dues",
-            amount: "250.00",
-            changePercentage: 131,
-            IconComponent: TrendingUp,
-          },
-          {
-            title: "Pending Orders",
-            amount: "147",
-            changePercentage: -56,
-            IconComponent: TrendingDown,
-          },
-        ]}
-      />
-      <StatCard
-        title="Sales & Discount"
-        primaryIcon={<Tag className="text-blue-600 w-6 h-6" />}
-        dateRange="22 - 29 October 2023"
-        details={[
-          {
-            title: "Sales",
-            amount: "1000.00",
-            changePercentage: 20,
-            IconComponent: TrendingUp,
-          },
-          {
-            title: "Discount",
-            amount: "200.00",
-            changePercentage: -10,
-            IconComponent: TrendingDown,
-          },
-        ]}
-      />
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6">
+      {/* Quick Stats Row */}
+      <div className="col-span-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Revenue"
+          value={`$${totalRevenue.toLocaleString()}`}
+          icon={<DollarSign className="w-6 h-6 text-emerald-600" />}
+          trend={12.5}
+          subtitle="vs. last month"
+        />
+        <StatCard
+          title="Active Customers"
+          value={customerCount.toString()}
+          icon={<Users className="w-6 h-6 text-blue-600" />}
+          trend={8.2}
+          subtitle="vs. last month"
+        />
+        <StatCard
+          title="Avg Order Value"
+          value={`$${avgOrderValue.toFixed(2)}`}
+          icon={<ShoppingCart className="w-6 h-6 text-purple-600" />}
+          trend={-2.4}
+          subtitle="vs. last month"
+        />
+        <StatCard
+          title="Inventory Value"
+          value={`$${inventoryValue.toLocaleString()}`}
+          icon={<Box className="w-6 h-6 text-orange-600" />}
+          trend={5.1}
+          subtitle="vs. last month"
+        />
+      </div>
+
+      {/* Main Content */}
+      <div className="xl:col-span-2 row-span-2">
+        <CardRevenueSummary />
+      </div>
+      <div className="row-span-2">
+        <CardInventoryAlerts />
+      </div>
+      <div className="xl:col-span-2">
+        <CardOrderSummary />
+      </div>
+      <div className="xl:col-span-1">
+        <CardPopularProducts />
+      </div>
     </div>
   );
 };
