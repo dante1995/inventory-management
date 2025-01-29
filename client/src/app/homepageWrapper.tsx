@@ -5,7 +5,7 @@ import Sidebar from "@/app/(components)/Sidebar";
 import Header from "@/app/(components)/Header";
 import StoreProvider, { useAppSelector } from "./redux";
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const HomepageLayout = ({ children }: { children: React.ReactNode }) => {
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
@@ -29,19 +29,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           isSidebarCollapsed ? "md:pl-24" : "md:pl-72"
         }`}
       >
-        <Header name="Dashboard" />
+        <Header name="Welcome" />
         <div className="mt-6">{children}</div>
       </main>
     </div>
   );
 };
 
-const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
+const HomepageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
-      <DashboardLayout>{children}</DashboardLayout>
+      <HomepageLayout>{children}</HomepageLayout>
     </StoreProvider>
   );
 };
 
-export default DashboardWrapper;
+export default HomepageWrapper;

@@ -17,7 +17,7 @@ import CardRevenueSummary from "./CardRevenueSummary";
 import StatCard from "./StatCard";
 import { useGetSalesOrdersQuery, useGetCustomersQuery, useGetItemsQuery } from "@/state/api";
 
-const Dashboard = () => {
+const Homepage = () => {
   const { data: salesOrders } = useGetSalesOrdersQuery();
   const { data: customers } = useGetCustomersQuery();
   const { data: items } = useGetItemsQuery();
@@ -79,4 +79,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Homepage;
