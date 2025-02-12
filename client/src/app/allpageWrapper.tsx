@@ -2,10 +2,10 @@
 
 import React, { useEffect } from "react";
 import Sidebar from "@/app/(components)/Sidebar";
-import Header from "@/app/(components)/Header";
+import Navbar from "@/app/(components)/Navbar";
 import StoreProvider, { useAppSelector } from "./redux";
 
-const HomepageLayout = ({ children }: { children: React.ReactNode }) => {
+const AllPageLayout = ({ children }: { children: React.ReactNode }) => {
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
@@ -29,19 +29,19 @@ const HomepageLayout = ({ children }: { children: React.ReactNode }) => {
           isSidebarCollapsed ? "md:pl-24" : "md:pl-72"
         }`}
       >
-        <Header name="Welcome" />
-        <div className="mt-6">{children}</div>
+        <Navbar />
+        {children}
       </main>
     </div>
   );
 };
 
-const HomepageWrapper = ({ children }: { children: React.ReactNode }) => {
+const AllPageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
-      <HomepageLayout>{children}</HomepageLayout>
+      <AllPageLayout>{children}</AllPageLayout>
     </StoreProvider>
   );
 };
 
-export default HomepageWrapper;
+export default AllPageWrapper;
