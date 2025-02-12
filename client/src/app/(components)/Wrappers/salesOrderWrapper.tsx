@@ -2,10 +2,11 @@
 
 import React, { useEffect } from "react";
 import Sidebar from "@/app/(components)/Sidebar";
+import Navbar from "@/app/(components)/Navbar";
 import Header from "@/app/(components)/Header";
-import StoreProvider, { useAppSelector } from "./redux";
+import StoreProvider, { useAppSelector } from "@/app/redux";
 
-const HomepageLayout = ({ children }: { children: React.ReactNode }) => {
+const SalesOrderLayout = ({ children }: { children: React.ReactNode }) => {
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
@@ -29,19 +30,19 @@ const HomepageLayout = ({ children }: { children: React.ReactNode }) => {
           isSidebarCollapsed ? "md:pl-24" : "md:pl-72"
         }`}
       >
-        <Header name="Welcome" />
+        <Navbar header={<Header name="Sales Orders" />} />
         <div className="mt-6">{children}</div>
       </main>
     </div>
   );
 };
 
-const HomepageWrapper = ({ children }: { children: React.ReactNode }) => {
+const SalesOrderWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
-      <HomepageLayout>{children}</HomepageLayout>
+      <SalesOrderLayout>{children}</SalesOrderLayout>
     </StoreProvider>
   );
 };
 
-export default HomepageWrapper;
+export default SalesOrderWrapper;
