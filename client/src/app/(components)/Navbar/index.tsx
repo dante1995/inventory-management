@@ -7,7 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const Navbar = () => {
+type NavbarProps = {
+  header: React.ReactNode;
+};
+
+const Navbar = ({ header }: NavbarProps) => {
   const dispatch = useAppDispatch();
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
@@ -26,14 +30,9 @@ const Navbar = () => {
     <div className="flex justify-between items-center w-full mb-7">
       {/* LEFT SIDE */}
       <div className="flex justify-between items-center gap-5">
-{/*        <button
-          className="px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
-          onClick={toggleSidebar}
-        >
-          <Menu className="w-4 h-4" />
-        </button>*/}
+        {header}
 
-        <div className="relative">
+{/*}        <div className="relative">
           <input
             type="search"
             placeholder="Start type to search groups & products"
@@ -43,7 +42,7 @@ const Navbar = () => {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-non">
             <Bell className="text-gray-500" size={20} />
           </div>
-        </div>
+        </div>*/}
       </div>
 
       {/* RIGHT SIDE */}
@@ -67,7 +66,7 @@ const Navbar = () => {
           <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
           <div className="flex items-center gap-3 cursor-pointer">
             <Image
-              src="https://s3-inventorymanagement.s3.us-east-2.amazonaws.com/profile.jpg"
+              src="/assets/person.png"
               alt="Profile"
               width={50}
               height={50}
