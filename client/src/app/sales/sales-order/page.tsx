@@ -1,78 +1,41 @@
+// SalesOrderPage.tsx
 "use client";
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
+import { Box, Stack, useTheme, useMediaQuery, IconButton, Typography, Chip } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { format } from "date-fns";
+import { alpha } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
+
+import SalesOrderHeader from './SalesOrderHeader';
+import OrdersDataGrid from './OrdersDataGrid';
+import OrderActionMenu from './OrderActionMenu';
+import FilterPopover from './FilterPopover';
+import OrderDetailDrawer from './OrderDetailDrawer';
+import CreateOrderDialog from './CreateOrderDialog';
+
 import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  CircularProgress,
-  Drawer,
-  IconButton,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  Paper,
-  Popover,
-  Stack,
-  TextField,
-  Typography,
-  alpha,
-  useMediaQuery,
-  useTheme,
-  Tooltip,
-  Select,
-  MenuItem as MuiMenuItem,
-  FormControl,
-  InputLabel,
-  SelectChangeEvent,
-} from '@mui/material';
-import {
-  Add as AddIcon,
+  Receipt as ReceiptIcon,
   CalendarToday as CalendarIcon,
-  Cancel as CancelIcon,
-  CheckCircle as CheckCircleIcon,
-  Delete as DeleteIcon,
   Edit as EditIcon,
-  FileDownload as FileDownloadIcon,
   MoreVert as MoreVertIcon,
   Person as PersonIcon,
-  Receipt as ReceiptIcon,
-  Refresh as RefreshIcon,
-  Search as SearchIcon,
   Store as StoreIcon,
-  FilterList as FilterListIcon,
-  CancelPresentation as CancelPresentationIcon,
-} from '@mui/icons-material';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { format } from 'date-fns';
+} from "@mui/icons-material";
+
 import {
   useGetSalesOrdersQuery,
   useUpdateSalesOrderStatusMutation,
   useDeleteSalesOrderMutation,
   useGetCustomersQuery,
   useGetStoresQuery,
-  SalesOrder,
   OrderStatus,
-  Customer,
-  Store,
-} from '@/state/api';
-import CreateOrderDialog from './CreateOrderDialog';
+} from "@/state/api";
+import { ExtendedSalesOrder } from './types';
+import { statusConfig } from './statusConfig';
 
-//
-// --- Configuration for status display ---
-//
-const statusConfig = {
-  DRAFT: { color: 'default', label: 'Draft', icon: ReceiptIcon },
-  PENDING: { color: 'warning', label: 'Pending', icon: CalendarIcon },
-  COMPLETED: { color: 'success', label: 'Completed', icon: CheckCircleIcon },
-  CANCELLED: { color: 'error', label: 'Cancelled', icon: CancelIcon },
-} as const;
-
-//
-// --- Utility function to check if date is 'today' ---
-//
-const isToday = (date: string | Date) => {
+function isToday(date: string | Date) {
   const now = new Date();
   const d = new Date(date);
   return (
@@ -80,51 +43,31 @@ const isToday = (date: string | Date) => {
     d.getMonth() === now.getMonth() &&
     d.getFullYear() === now.getFullYear()
   );
-};
-
-interface ExtendedSalesOrder extends SalesOrder {
-  customer?: Customer;
-  store?: Store;
 }
 
 export default function SalesOrderPage() {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  //
-  // --- Local State ---
-  //
+  // Local State
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [detailPanelOpen, setDetailPanelOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<ExtendedSalesOrder | null>(null);
-
-  // Single text-based search query
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Compact filter popover
+  const [searchQuery, setSearchQuery] = useState("");
   const [filterPopoverAnchor, setFilterPopoverAnchor] = useState<null | HTMLElement>(null);
-
-  // Example filter states: status & date range
-  const [filterStatus, setFilterStatus] = useState<OrderStatus | 'ALL'>('ALL');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
-
-  // "More" action menu
+  const [filterStatus, setFilterStatus] = useState<OrderStatus | "ALL">("ALL");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
 
-  //
-  // --- API Calls ---
-  //
+  // API Calls
   const { data: orders = [], isLoading, refetch } = useGetSalesOrdersQuery();
   const { data: customers = [] } = useGetCustomersQuery();
   const { data: stores = [] } = useGetStoresQuery();
-
   const [updateStatus] = useUpdateSalesOrderStatusMutation();
   const [deleteOrder] = useDeleteSalesOrderMutation();
 
-  //
-  // --- Combine order data with associated customer and store info ---
-  //
+  // Combine order data with details
   const ordersWithDetails: ExtendedSalesOrder[] = useMemo(() => {
     return orders.map((order) => ({
       ...order,
@@ -133,14 +76,10 @@ export default function SalesOrderPage() {
     }));
   }, [orders, customers, stores]);
 
-  //
-  // --- Filter Logic ---
-  //
+  // Filter logic
   const filteredOrders = useMemo(() => {
     const searchLower = searchQuery.toLowerCase();
-
     return ordersWithDetails.filter((order) => {
-      // Single text search across multiple fields
       const matchesSearch =
         order.invoiceNumber?.toLowerCase().includes(searchLower) ||
         (order.store && order.store.name.toLowerCase().includes(searchLower)) ||
@@ -149,12 +88,7 @@ export default function SalesOrderPage() {
             .toLowerCase()
             .includes(searchLower)) ||
         (order.customer && order.customer.phone.toLowerCase().includes(searchLower));
-
-      // Status filter
-      const matchesStatus =
-        filterStatus === 'ALL' ? true : order.status === filterStatus;
-
-      // Date range filter
+      const matchesStatus = filterStatus === "ALL" ? true : order.status === filterStatus;
       let matchesDateRange = true;
       if (startDate) {
         const filterStart = new Date(startDate);
@@ -166,14 +100,11 @@ export default function SalesOrderPage() {
         const orderDate = new Date(order.orderDate);
         if (orderDate > filterEnd) matchesDateRange = false;
       }
-
       return matchesSearch && matchesStatus && matchesDateRange;
     });
   }, [ordersWithDetails, searchQuery, filterStatus, startDate, endDate]);
 
-  //
-  // --- Handlers ---
-  //
+  // Handlers
   const handleOpenDetailPanel = (order: ExtendedSalesOrder) => {
     setSelectedOrder(order);
     setDetailPanelOpen(true);
@@ -184,22 +115,22 @@ export default function SalesOrderPage() {
     setDetailPanelOpen(false);
   };
 
-  const handleStatusUpdate = async (id: string, status: 'COMPLETED' | 'CANCELLED') => {
+  const handleStatusUpdate = async (id: string, status: "COMPLETED" | "CANCELLED") => {
     try {
       await updateStatus({ id, status }).unwrap();
       refetch();
     } catch (error) {
-      console.error('Failed to update status:', error);
+      console.error("Failed to update status:", error);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this order?')) {
+    if (window.confirm("Are you sure you want to delete this order?")) {
       try {
         await deleteOrder(id).unwrap();
         refetch();
       } catch (error) {
-        console.error('Failed to delete order:', error);
+        console.error("Failed to delete order:", error);
       }
     }
   };
@@ -224,26 +155,22 @@ export default function SalesOrderPage() {
     setActionMenuAnchor(null);
   };
 
-  const handleChangeFilterStatus = (event: SelectChangeEvent) => {
-    setFilterStatus(event.target.value as OrderStatus | 'ALL');
+  const handleFilterStatusChange = (event: SelectChangeEvent<string>) => {
+    setFilterStatus(event.target.value as OrderStatus | "ALL");
   };
 
-  //
-  // --- Today’s Summary Stats ---
-  //
+  // Today's Summary Stats
   const todayOrders = ordersWithDetails.filter((o) => isToday(o.orderDate));
   const todayCount = todayOrders.length;
-  const todayPending = todayOrders.filter((o) => o.status === 'PENDING').length;
-  const todayCompleted = todayOrders.filter((o) => o.status === 'COMPLETED').length;
-  const todayCancelled = todayOrders.filter((o) => o.status === 'CANCELLED').length;
+  const todayPending = todayOrders.filter((o) => o.status === "PENDING").length;
+  const todayCompleted = todayOrders.filter((o) => o.status === "COMPLETED").length;
+  const todayCancelled = todayOrders.filter((o) => o.status === "CANCELLED").length;
 
-  //
-  // --- DataGrid Columns ---
-  //
+  // DataGrid Columns
   const columns: GridColDef<ExtendedSalesOrder>[] = [
     {
-      field: 'invoiceNumber',
-      headerName: 'Invoice #',
+      field: "invoiceNumber",
+      headerName: "Invoice #",
       flex: 1,
       minWidth: 130,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => (
@@ -254,8 +181,8 @@ export default function SalesOrderPage() {
             sx={{
               fontWeight: 600,
               color: theme.palette.primary.main,
-              cursor: 'pointer',
-              '&:hover': { textDecoration: 'underline' },
+              cursor: "pointer",
+              "&:hover": { textDecoration: "underline" },
             }}
             onClick={() => handleOpenDetailPanel(params.row)}
           >
@@ -265,12 +192,12 @@ export default function SalesOrderPage() {
       ),
     },
     {
-      field: 'orderDate',
-      headerName: 'Date',
+      field: "orderDate",
+      headerName: "Date",
       flex: 1,
       minWidth: 120,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => {
-        const date = params.value ? format(new Date(params.value), 'dd MMM yyyy') : 'N/A';
+        const date = params.value ? format(new Date(params.value), "dd MMM yyyy") : "N/A";
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <CalendarIcon fontSize="small" color="action" />
@@ -280,15 +207,13 @@ export default function SalesOrderPage() {
       },
     },
     {
-      field: 'customer',
-      headerName: 'Customer',
+      field: "customer",
+      headerName: "Customer",
       flex: 1.4,
       minWidth: 180,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => {
         const customer = params.row.customer;
-        if (!customer) {
-          return <Typography variant="body2">N/A</Typography>;
-        }
+        if (!customer) return <Typography variant="body2">N/A</Typography>;
         return (
           <Stack spacing={0.5}>
             <Stack direction="row" spacing={0.5} alignItems="center">
@@ -305,15 +230,13 @@ export default function SalesOrderPage() {
       },
     },
     {
-      field: 'store',
-      headerName: 'Store',
+      field: "store",
+      headerName: "Store",
       flex: 1.2,
       minWidth: 160,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => {
         const store = params.row.store;
-        if (!store) {
-          return <Typography variant="body2">N/A</Typography>;
-        }
+        if (!store) return <Typography variant="body2">N/A</Typography>;
         return (
           <Stack spacing={0.5}>
             <Stack direction="row" spacing={0.5} alignItems="center">
@@ -330,8 +253,8 @@ export default function SalesOrderPage() {
       },
     },
     {
-      field: 'status',
-      headerName: 'Status',
+      field: "status",
+      headerName: "Status",
       flex: 0.9,
       minWidth: 120,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => {
@@ -347,23 +270,21 @@ export default function SalesOrderPage() {
             sx={{
               minWidth: 90,
               fontWeight: 500,
-              '& .MuiChip-icon': {
-                marginLeft: 1,
-              },
+              "& .MuiChip-icon": { marginLeft: 1 },
             }}
           />
         );
       },
     },
     {
-      field: 'totalAmount',
-      headerName: 'Amount',
+      field: "totalAmount",
+      headerName: "Amount",
       flex: 1,
       minWidth: 130,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => (
         <Typography variant="body2" fontWeight={600} color="primary.main">
           ₹
-          {Number(params.value).toLocaleString('en-IN', {
+          {Number(params.value).toLocaleString("en-IN", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
@@ -371,33 +292,31 @@ export default function SalesOrderPage() {
       ),
     },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      headerName: "Actions",
       width: 100,
       sortable: false,
       renderCell: (params: GridRenderCellParams<ExtendedSalesOrder>) => (
         <Stack direction="row" spacing={1}>
-          <Tooltip title="View / Edit">
-            <IconButton
-              size="small"
-              onClick={() => handleOpenDetailPanel(params.row)}
-              sx={{
-                color: theme.palette.text.secondary,
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  color: theme.palette.primary.main,
-                },
-              }}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          <IconButton
+            size="small"
+            onClick={() => handleOpenDetailPanel(params.row)}
+            sx={{
+              color: theme.palette.text.secondary,
+              "&:hover": {
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                color: theme.palette.primary.main,
+              },
+            }}
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
           <IconButton
             size="small"
             onClick={(event) => handleActionMenuOpen(event, params.row)}
             sx={{
               color: theme.palette.text.secondary,
-              '&:hover': {
+              "&:hover": {
                 backgroundColor: alpha(theme.palette.primary.main, 0.1),
                 color: theme.palette.primary.main,
               },
@@ -413,361 +332,55 @@ export default function SalesOrderPage() {
   return (
     <Box
       sx={{
-        height: '100%',
+        height: "100%",
         p: { xs: 2, md: 3 },
         backgroundColor: theme.palette.background.default,
       }}
     >
       <Stack spacing={3}>
-        {/* ---- Header and Today’s Overview ---- */}
-        <Card sx={{ p: 2.5 }}>
-          <Stack spacing={2}>
-            {/* Title + Primary Actions */}
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              justifyContent="space-between"
-              alignItems={{ xs: 'flex-start', sm: 'center' }}
-              spacing={2}
-            >
-              {/* Left: Title */}
-              <Stack direction="row" spacing={2} alignItems="center">
-                <ReceiptIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                <Typography
-                  variant="h4"
-                  component="h1"
-                  sx={{
-                    fontWeight: 600,
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  Manage Sales Orders
-                </Typography>
-              </Stack>
-
-              {/* Right: Actions */}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
-                width={{ xs: '100%', sm: 'auto' }}
-              >
-                <Button
-                  variant="outlined"
-                  startIcon={<RefreshIcon />}
-                  onClick={() => refetch()}
-                  sx={{
-                    borderColor: alpha(theme.palette.primary.main, 0.2),
-                    '&:hover': {
-                      borderColor: theme.palette.primary.main,
-                      backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                    },
-                  }}
-                >
-                  Refresh Orders
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setCreateDialogOpen(true)}
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    '&:hover': {
-                      backgroundColor: theme.palette.primary.dark,
-                    },
-                  }}
-                >
-                  New Order
-                </Button>
-              </Stack>
-            </Stack>
-
-            {/* Today’s Overview */}
-            <Stack direction="row" spacing={2} flexWrap="wrap">
-              <Card
-                sx={{
-                  flex: 1,
-                  minWidth: isSmallScreen ? '100%' : 200,
-                  p: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    Today’s Orders
-                  </Typography>
-                  <Typography variant="h6">{todayCount}</Typography>
-                </Stack>
-                <ReceiptIcon color="primary" />
-              </Card>
-              <Card
-                sx={{
-                  flex: 1,
-                  minWidth: isSmallScreen ? '100%' : 200,
-                  p: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    Today’s Pending
-                  </Typography>
-                  <Typography variant="h6">{todayPending}</Typography>
-                </Stack>
-                <CalendarIcon color="warning" />
-              </Card>
-              <Card
-                sx={{
-                  flex: 1,
-                  minWidth: isSmallScreen ? '100%' : 200,
-                  p: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    Today’s Completed
-                  </Typography>
-                  <Typography variant="h6">{todayCompleted}</Typography>
-                </Stack>
-                <CheckCircleIcon color="success" />
-              </Card>
-              <Card
-                sx={{
-                  flex: 1,
-                  minWidth: isSmallScreen ? '100%' : 200,
-                  p: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    Today’s Cancelled
-                  </Typography>
-                  <Typography variant="h6">{todayCancelled}</Typography>
-                </Stack>
-                <CancelPresentationIcon color="error" />
-              </Card>
-            </Stack>
-
-            {/* Single Search + Filters */}
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={2}
-              alignItems="stretch"
-            >
-              {/* Single search bar across all parameters */}
-              <TextField
-                fullWidth
-                placeholder="Search by Invoice #, Store, or Customer..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon color="action" />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  flex: 2,
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: theme.palette.background.paper,
-                  },
-                }}
-              />
-
-              <Button
-                variant="outlined"
-                startIcon={<FilterListIcon />}
-                onClick={handleFilterOpen}
-                sx={{
-                  minWidth: 120,
-                  borderColor: alpha(theme.palette.primary.main, 0.2),
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                  },
-                }}
-              >
-                Filters
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<FileDownloadIcon />}
-                onClick={() => alert('Export Orders feature to be implemented.')}
-                sx={{
-                  minWidth: 120,
-                  borderColor: alpha(theme.palette.primary.main, 0.2),
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                  },
-                }}
-              >
-                Export Orders
-              </Button>
-            </Stack>
-          </Stack>
-        </Card>
-
-        {/* ---- Data Grid for Orders ---- */}
-        <Card>
-          <DataGrid<ExtendedSalesOrder>
-            rows={filteredOrders}
-            columns={columns}
-            loading={isLoading}
-            autoHeight
-            pageSizeOptions={[10, 25, 50]}
-            initialState={{
-              pagination: { paginationModel: { pageSize: 25 } },
-              sorting: {
-                sortModel: [{ field: 'orderDate', sort: 'desc' }],
-              },
-            }}
-            disableRowSelectionOnClick
-            sx={{
-              border: 'none',
-              '& .MuiDataGrid-cell': {
-                borderColor: theme.palette.divider,
-                py: 1.5,
-              },
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.05),
-                borderBottom: `1px solid ${theme.palette.divider}`,
-              },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.02),
-              },
-            }}
-          />
-        </Card>
+        <SalesOrderHeader
+          theme={theme}
+          isSmallScreen={isSmallScreen}
+          todayCount={todayCount}
+          todayPending={todayPending}
+          todayCompleted={todayCompleted}
+          todayCancelled={todayCancelled}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onFilterOpen={handleFilterOpen}
+          onRefresh={refetch}
+          onNewOrder={() => setCreateDialogOpen(true)}
+          onExport={() => alert("Export Orders feature to be implemented.")}
+        />
+        <OrdersDataGrid
+          filteredOrders={filteredOrders}
+          columns={columns}
+          isLoading={isLoading}
+          theme={theme}
+        />
       </Stack>
 
-      {/* ---- Action Menu ---- */}
-      <Menu
+      <OrderActionMenu
         anchorEl={actionMenuAnchor}
-        open={Boolean(actionMenuAnchor)}
         onClose={handleActionMenuClose}
-        PaperProps={{
-          elevation: 3,
-          sx: { minWidth: 180 },
-        }}
-      >
-        <MenuItem
-          onClick={() => {
-            if (selectedOrder) {
-              handleStatusUpdate(selectedOrder.id, 'COMPLETED');
-            }
-            handleActionMenuClose();
-          }}
-          sx={{
-            color: theme.palette.success.main,
-            '&:hover': { backgroundColor: alpha(theme.palette.success.main, 0.1) },
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <CheckCircleIcon fontSize="small" />
-            <Typography>Mark Completed</Typography>
-          </Stack>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            if (selectedOrder) {
-              handleStatusUpdate(selectedOrder.id, 'CANCELLED');
-            }
-            handleActionMenuClose();
-          }}
-          sx={{
-            color: theme.palette.error.main,
-            '&:hover': { backgroundColor: alpha(theme.palette.error.main, 0.1) },
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <CancelIcon fontSize="small" />
-            <Typography>Mark Cancelled</Typography>
-          </Stack>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            if (selectedOrder) {
-              handleDelete(selectedOrder.id);
-            }
-            handleActionMenuClose();
-          }}
-          sx={{
-            color: theme.palette.error.main,
-            '&:hover': { backgroundColor: alpha(theme.palette.error.main, 0.1) },
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <DeleteIcon fontSize="small" />
-            <Typography>Delete Order</Typography>
-          </Stack>
-        </MenuItem>
-      </Menu>
+        selectedOrder={selectedOrder}
+        onUpdateStatus={handleStatusUpdate}
+        onDelete={handleDelete}
+        theme={theme}
+      />
 
-      {/* ---- Filter Popover (compact overlay) ---- */}
-      <Popover
-        open={Boolean(filterPopoverAnchor)}
+      <FilterPopover
         anchorEl={filterPopoverAnchor}
         onClose={handleFilterClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-        PaperProps={{
-          sx: { p: 2, width: isSmallScreen ? '90%' : 320 },
-        }}
-      >
-        <Typography variant="subtitle1" fontWeight={600} mb={1}>
-          Refine Your Orders
-        </Typography>
+        filterStatus={filterStatus}
+        onFilterStatusChange={handleFilterStatusChange}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        isSmallScreen={isSmallScreen}
+      />
 
-        {/* Status filter */}
-        <FormControl fullWidth size="small" sx={{ mb: 2 }}>
-          <InputLabel>Status</InputLabel>
-          <Select value={filterStatus} label="Status" onChange={handleChangeFilterStatus}>
-            <MuiMenuItem value="ALL">All Statuses</MuiMenuItem>
-            <MuiMenuItem value="DRAFT">Draft</MuiMenuItem>
-            <MuiMenuItem value="PENDING">Pending</MuiMenuItem>
-            <MuiMenuItem value="COMPLETED">Completed</MuiMenuItem>
-            <MuiMenuItem value="CANCELLED">Cancelled</MuiMenuItem>
-          </Select>
-        </FormControl>
-
-        {/* Date range filters */}
-        <TextField
-          label="Start Date"
-          type="date"
-          size="small"
-          fullWidth
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          sx={{ mb: 2 }}
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
-          label="End Date"
-          type="date"
-          size="small"
-          fullWidth
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          sx={{ mb: 2 }}
-          InputLabelProps={{ shrink: true }}
-        />
-
-        <Button variant="contained" fullWidth onClick={handleFilterClose}>
-          Apply Filters
-        </Button>
-      </Popover>
-
-      {/* ---- Create New Order Dialog ---- */}
       {createDialogOpen && (
         <CreateOrderDialog
           open={createDialogOpen}
@@ -778,91 +391,13 @@ export default function SalesOrderPage() {
         />
       )}
 
-      {/* ---- Detail Side Panel ---- */}
-      <Drawer
-        anchor="right"
+      <OrderDetailDrawer
         open={detailPanelOpen}
         onClose={handleCloseDetailPanel}
-        PaperProps={{
-          sx: { width: isSmallScreen ? '100%' : 480, p: 3 },
-        }}
-      >
-        {selectedOrder ? (
-          <Stack spacing={2} height="100%">
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" fontWeight={600}>
-                Order Details
-              </Typography>
-              <IconButton onClick={handleCloseDetailPanel}>
-                <CancelIcon />
-              </IconButton>
-            </Stack>
-
-            <Stack spacing={1} mt={2}>
-              <Typography variant="body2" color="text.secondary">
-                Invoice No: <strong>{selectedOrder.invoiceNumber}</strong>
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Order Date:{' '}
-                {selectedOrder.orderDate
-                  ? format(new Date(selectedOrder.orderDate), 'dd MMM yyyy')
-                  : 'N/A'}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Customer:{' '}
-                {selectedOrder.customer
-                  ? `${selectedOrder.customer.firstName} ${selectedOrder.customer.lastName}`
-                  : 'N/A'}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Store: {selectedOrder.store ? selectedOrder.store.name : 'N/A'}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Status: {statusConfig[selectedOrder.status].label}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Amount: ₹
-                {Number(selectedOrder.totalAmount).toLocaleString('en-IN', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </Typography>
-
-              {/* 
-                Place line items or other relevant details here, 
-                and a mechanism to edit them if needed. 
-              */}
-            </Stack>
-
-            <Box flexGrow={1} />
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
-              <Button variant="outlined" onClick={handleCloseDetailPanel}>
-                Close
-              </Button>
-              {/* Example button if saving edits directly */}
-              <Button
-                variant="contained"
-                onClick={() => alert('Save changes (if editing is implemented).')}
-              >
-                Save
-              </Button>
-            </Stack>
-          </Stack>
-        ) : (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-            flexDirection="column"
-          >
-            <CircularProgress />
-            <Typography variant="body2" mt={2}>
-              Loading details...
-            </Typography>
-          </Box>
-        )}
-      </Drawer>
+        order={selectedOrder}
+        theme={theme}
+        isSmallScreen={isSmallScreen}
+      />
     </Box>
   );
 }
