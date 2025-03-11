@@ -30,7 +30,7 @@ const SalesOrderLayout = ({ children }: { children: React.ReactNode }) => {
           isSidebarCollapsed ? "md:pl-24" : "md:pl-72"
         }`}
       >
-        <Navbar header={<Header name="Sales Orders" />} />
+        <Navbar header={<Header name="Sales" />} />
         <div className="mt-6">{children}</div>
       </main>
     </div>
