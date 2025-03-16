@@ -135,7 +135,8 @@ export interface SalesOrder {
   storeId: string
   orderDate: string
   status: OrderStatus
-  totalAmount: string
+  items: SalesOrderItem[]
+  totalAmount: number
   isInterState: boolean
   invoiceNumber?: string
   createdAt?: string
