@@ -18,7 +18,7 @@ exports.deleteSalesOrder = deleteSalesOrder;
 const index_1 = require("../db/index");
 function createSalesOrder(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        return index_1.prisma.salesOrder.create({ data });
+        return index_1.prisma.salesOrder.create({ data: Object.assign(Object.assign({}, data), { items: { create: data.items } }) });
     });
 }
 function getSalesOrderById(id) {

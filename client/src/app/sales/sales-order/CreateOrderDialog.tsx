@@ -36,6 +36,10 @@ import {
   useGetStoresQuery,
   Customer,
   Store,
+  OrderStatus,
+  SalesOrderItem,
+  Item,
+  useGetItemsQuery,
 } from "@/state/api";
 
 /** 
@@ -44,7 +48,7 @@ import {
  */
 interface LineItem {
   id: number;
-  productName: string;
+  itemId: string;
   quantity: number;
   unitPrice: number;
 }
@@ -57,9 +61,10 @@ interface CreateOrderDialogProps {
 export default function CreateOrderDialog({ open, onClose }: CreateOrderDialogProps) {
   const theme = useTheme();
 
-  // Example: fetch data for customers & stores
+  // Example: fetch data for customers & stores &items
   const { data: customers = [], isLoading: isLoadingCustomers } = useGetCustomersQuery();
   const { data: stores = [], isLoading: isLoadingStores } = useGetStoresQuery();
+  const { data: items = [], isLoading: isLoadingItems } = useGetItemsQuery();
 
   // A mutation hook to create new orders (adjust to your API)
   const [createSalesOrder, { isLoading: isCreating }] = useCreateSalesOrderMutation();
@@ -75,7 +80,7 @@ export default function CreateOrderDialog({ open, onClose }: CreateOrderDialogPr
       ...prev,
       {
         id: Date.now(),
-        productName: "",
+        itemId: "",
         quantity: 1,
         unitPrice: 0,
       },
@@ -103,15 +108,24 @@ export default function CreateOrderDialog({ open, onClose }: CreateOrderDialogPr
     }
 
     const payload = {
+      companyWorkspaceId: "b70b6b6e-49f8-4c85-a9c4-4fc64e932a23",
+      invoiceNumber: "SO-WS1-" + Date.now(),
       customerId: selectedCustomer.id,
       storeId: selectedStore.id,
       orderDate: orderDate.toISOString(),
-      lineItems: lineItems.map((item) => ({
-        productName: item.productName,
+      items: lineItems.map((item) => ({
         quantity: item.quantity,
-        unitPrice: item.unitPrice,
-      })),
-      // Add any additional fields required by your API
+        unitPrice: item.unitPrice as unknown as string,
+        lineTotal: (item.quantity * item.unitPrice) as unknown as string,
+        gstRate: "10.0",
+        lineCgst: "10.0",
+        lineSgst: "10.0",
+        lineIgst: "10.0",
+        itemId: item.itemId,
+      } as SalesOrderItem)),
+      status: 'DRAFT' as OrderStatus,
+      totalAmount: lineItems.reduce((total, item) => total + item.quantity * item.unitPrice, 0),
+      isInterState: false,
     };
 
     try {
@@ -260,15 +274,27 @@ export default function CreateOrderDialog({ open, onClose }: CreateOrderDialogPr
                 spacing={2}
                 sx={{ pb: 1, borderBottom: `1px solid ${theme.palette.divider}` }}
               >
-                <TextField
-                  label="Product"
-                  value={item.productName}
-                  onChange={(e) =>
-                    handleLineItemChange(item.id, "productName", e.target.value)
-                  }
+                <InputLabel sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                </InputLabel>
+                <Select
+                  value={item.itemId}
+                  label="Item"
+                  onChange={(e) => {
+                    const itemObj = items.find((s) => s.id === e.target.value);
+                    if (itemObj) {
+                      handleLineItemChange(item.id, "itemId", e.target.value);
+                    }
+                  }}
+                  disabled={isLoadingItems}
                   size="small"
-                  fullWidth
-                />
+                  sx={{ width: 160 }}
+                >
+                  {items.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
                 <TextField
                   label="Qty"
                   type="number"

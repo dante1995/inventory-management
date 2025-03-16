@@ -3,7 +3,10 @@ import { prisma } from '../db/index'
 import type { Prisma } from '@prisma/client'
 
 export async function createSalesOrder(data: Prisma.SalesOrderCreateInput) {
-  return prisma.salesOrder.create({ data })
+  return prisma.salesOrder.create({ data: {
+    ...data,
+    items: { create: data.items as Prisma.SalesOrderItemCreateNestedManyWithoutSalesOrderInput['create'] },
+  } })
 }
 
 export async function getSalesOrderById(id: string) {
